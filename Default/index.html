@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reverse:1999風 キャラ画面（再現）</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="stage">
+    <!-- 画面全体（比率固定） -->
+    <main class="screen" aria-label="character screen">
+
+      <!-- 上部アイコン列（図形はCSSで再現） -->
+      <header class="top-icons">
+        <button class="iconBtn tri" aria-label="menu"></button>
+        <button class="iconBtn sq" aria-label="square"></button>
+        <button class="iconBtn eye" aria-label="eye"></button>
+        <button class="iconBtn beaker" aria-label="beaker"></button>
+        <button class="iconBtn swirl" aria-label="swirl"></button>
+        <button class="iconBtn lock" aria-label="lock"></button>
+        <button class="iconBtn warn" aria-label="warning"></button>
+      </header>
+
+      <!-- 左：情報 -->
+      <section class="left">
+        <div class="affinity">
+          <!-- ここだけ画像（岩属性） -->
+          <img class="affinityIcon" src="./assets/attribute-rock.png" alt="岩属性" />
+          <div class="affinityLabel">MINERAL</div>
+        </div>
+
+        <div class="rarity" aria-label="rarity">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+
+        <h1 class="charName">
+          ルブシカ
+          <span class="charNameSub">Ribushka</span>
+        </h1>
+
+        <div class="bond">
+          <div class="bondRow">
+            <span class="bondLabel">絆</span>
+            <div class="bondBar" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100">
+              <div class="bondFill" style="width:88%"></div>
+            </div>
+            <span class="bondPct">88%</span>
+          </div>
+        </div>
+
+        <div class="roles">
+          <span>回復</span>
+          <span class="dot">・</span>
+          <span>サポート</span>
+          <span class="dot">・</span>
+          <span>血の新</span>
+        </div>
+
+        <button class="sectionTitle" type="button">
+          個人ステータス <span class="chev">›</span>
+        </button>
+
+        <dl class="stats">
+          <div class="statRow">
+            <dt><span class="bullet atk"></span>攻撃力</dt>
+            <dd>1705</dd>
+          </div>
+          <div class="statRow">
+            <dt><span class="bullet hp"></span>HP</dt>
+            <dd>15675</dd>
+          </div>
+          <div class="statRow">
+            <dt><span class="bullet rdef"></span>リアル防御力</dt>
+            <dd>627</dd>
+          </div>
+          <div class="statRow">
+            <dt><span class="bullet mdef"></span>メンタル防御</dt>
+            <dd>627</dd>
+          </div>
+          <div class="statRow">
+            <dt><span class="bullet crit"></span>クリティカルテクニック</dt>
+            <dd>381</dd>
+          </div>
+        </dl>
+
+        <div class="leftDots" aria-hidden="true"></div>
+      </section>
+
+      <!-- 中央：立ち絵（ここだけ画像） -->
+      <section class="center" aria-label="portrait area">
+        <div class="portraitWrap">
+          <img class="portrait" src="./assets/portrait.png" alt="character portrait" />
+        </div>
+
+        <!-- ふわっとした円弧ライン（CSS） -->
+        <div class="orbit" aria-hidden="true"></div>
+        <div class="spark s1" aria-hidden="true"></div>
+        <div class="spark s2" aria-hidden="true"></div>
+      </section>
+
+      <!-- 右：パネル -->
+      <section class="right">
+        <div class="rightTop">
+          <div class="box lvl">
+            <div class="boxTitle">レベル</div>
+            <div class="boxValue">60<span class="muted">/60</span></div>
+            <button class="plus" aria-label="level up">＋</button>
+          </div>
+          <div class="box insight">
+            <div class="boxTitle">洞察</div>
+            <div class="boxValue"><span class="insIcon" aria-hidden="true"></span></div>
+            <button class="plus" aria-label="insight up">＋</button>
+          </div>
+        </div>
+
+        <div class="skillBar">
+          <div class="skillName">愉快な笛吹き</div>
+          <div class="triMarks" aria-hidden="true">
+            <span class="t"></span><span class="t"></span><span class="t"></span><span class="t"></span>
+          </div>
+        </div>
+
+        <!-- 右カード3枚：ここだけ画像 -->
+        <div class="cards">
+          <img class="card" src="./assets/card1.png" alt="card 1" />
+          <img class="card" src="./assets/card2.png" alt="card 2" />
+          <img class="card" src="./assets/card3.png" alt="card 3" />
+        </div>
+
+        <div class="favorite">
+          <div class="favLabel">お気に入り<br>の心相</div>
+          <div class="favBadge">Lv.60</div>
+          <div class="favGem" aria-hidden="true"></div>
+        </div>
+
+        <div class="bottomButtons">
+          <button class="bigBtn">塑造</button>
+          <button class="bigBtn">
+            共鳴
+            <span class="wire" aria-hidden="true"></span>
+            <span class="lv">Lv.12</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 背景の薄い文字（DOCUMENT）っぽいの -->
+      <div class="bgWord" aria-hidden="true">DOCUMENT</div>
+    </main>
+  </div>
+</body>
+</html>
