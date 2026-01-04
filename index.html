@@ -2,677 +2,94 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reverse:1999風 キャラ画面（参考再現）</title>
-  <style>
-    :root{
-      /* 色味はスクショ寄せ（暗い灰＋くすんだ金＋橙） */
-      --bg0:#0b0b0c;
-      --bg1:#141416;
-      --paper:#141312;
-      --line:rgba(255,255,255,.16);
-      --line2:rgba(255,255,255,.10);
-      --text:rgba(255,255,255,.86);
-      --muted:rgba(255,255,255,.55);
-      --faint:rgba(255,255,255,.35);
-      --gold:#d7c9a6;
-      --orange:#d1704e;
-      --orange2:#c55e3e;
-      --shadow: 0 16px 40px rgba(0,0,0,.55);
-      --radius: 10px;
-
-      /* ここに立ち絵画像を指定（URLでもOK） */
-      --portrait-url: none; /* 例: url("./portrait.png") */
-    }
-
-    *{ box-sizing:border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(900px 520px at 52% 25%, rgba(208,112,78,.22), transparent 60%),
-        radial-gradient(900px 560px at 16% 40%, rgba(255,255,255,.06), transparent 55%),
-        radial-gradient(700px 460px at 86% 70%, rgba(255,255,255,.05), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      overflow:hidden;
-    }
-
-    /* フィルムノイズ（画像無しで質感） */
-    body::before{
-      content:"";
-      position:fixed; inset:0;
-      background:
-        repeating-linear-gradient(0deg,
-          rgba(255,255,255,.028) 0px,
-          rgba(255,255,255,.028) 1px,
-          transparent 2px,
-          transparent 5px
-        );
-      opacity:.10;
-      mix-blend-mode: overlay;
-      pointer-events:none;
-    }
-    body::after{
-      content:"";
-      position:fixed; inset:-40px;
-      background:
-        radial-gradient(1000px 600px at 40% 0%, rgba(255,255,255,.06), transparent 55%),
-        radial-gradient(900px 600px at 70% 100%, rgba(0,0,0,.65), transparent 55%);
-      opacity:.35;
-      pointer-events:none;
-    }
-
-    .screen{
-      height:100%;
-      padding: 22px 26px;
-      display:grid;
-      grid-template-rows: auto 1fr;
-      gap: 12px;
-    }
-
-    /* ─────────── TOP ICON BAR ─────────── */
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 4px 4px 10px;
-      position:relative;
-      z-index:5;
-    }
-    .icons{
-      display:flex; gap:18px; align-items:center;
-      color: rgba(255,255,255,.75);
-    }
-    .ic{
-      width: 34px; height: 34px;
-      display:grid; place-items:center;
-      border:1px solid var(--line2);
-      border-radius: 999px;
-      background: rgba(0,0,0,.18);
-      box-shadow: 0 8px 18px rgba(0,0,0,.35);
-    }
-    .ic svg{ width:18px; height:18px; opacity:.9; }
-    .doc{
-      color: rgba(255,255,255,.25);
-      letter-spacing:.36em;
-      font-weight:700;
-      font-size: 14px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      user-select:none;
-    }
-    .doc .dot{
-      width:7px; height:7px; border-radius:99px;
-      background: rgba(255,255,255,.25);
-      opacity:.45;
-    }
-
-    /* ─────────── MAIN LAYOUT ─────────── */
-    .main{
-      min-height:0;
-      display:grid;
-      grid-template-columns: 420px 1fr 420px;
-      gap: 18px;
-      position:relative;
-      z-index:3;
-    }
-
-    /* 左パネル（文字情報は“背景に溶ける”感じで） */
-    .left{
-      padding: 10px 8px;
-      position:relative;
-    }
-
-    /* 中央：立ち絵 */
-    .center{
-      position:relative;
-      min-height:0;
-      display:grid;
-      place-items:center;
-    }
-    .portraitWrap{
-      width: min(420px, 70%);
-      height: min(560px, 92%);
-      position:relative;
-      display:grid;
-      place-items:end center;
-      filter: drop-shadow(0 26px 55px rgba(0,0,0,.55));
-    }
-    .portrait{
-      width:100%;
-      height:100%;
-      border-radius: 22px;
-      background:
-        radial-gradient(520px 520px at 50% 24%, rgba(208,112,78,.20), transparent 62%),
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.12)),
-        var(--portrait-url);
-      background-size: cover;
-      background-position: center 16%;
-      border: 1px solid rgba(255,255,255,.06);
-      position:relative;
-      overflow:hidden;
-    }
-    .portrait::after{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(420px 280px at 50% 40%, rgba(255,255,255,.08), transparent 65%);
-      opacity:.55;
-      pointer-events:none;
-    }
-
-    /* 立ち絵が無い時の案内 */
-    .portraitHint{
-      position:absolute;
-      inset:auto 14px 16px 14px;
-      padding: 12px 12px;
-      border:1px dashed rgba(255,255,255,.18);
-      border-radius: 14px;
-      background: rgba(0,0,0,.25);
-      color: rgba(255,255,255,.62);
-      font-size: 12px;
-      line-height:1.6;
-      display:none;
-    }
-    :root[style*="--portrait-url: none"] .portraitHint{ display:block; }
-
-    /* 下部の手書き風の名前っぽいやつ */
-    .sig{
-      position:absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 46px;
-      color: rgba(208,112,78,.85);
-      letter-spacing:.02em;
-      font-family: "Comic Sans MS", "Bradley Hand", "Segoe Script", cursive;
-      text-shadow: 0 10px 30px rgba(0,0,0,.55);
-      user-select:none;
-      pointer-events:none;
-    }
-
-    /* 右パネル */
-    .right{
-      padding: 10px 8px;
-      position:relative;
-      display:flex;
-      flex-direction:column;
-      gap: 14px;
-      min-height:0;
-    }
-
-    /* ─────────── LEFT DETAILS ─────────── */
-    .badgeStar{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      margin: 8px 0 4px;
-      opacity:.9;
-    }
-    .starRing{
-      width: 72px; height:72px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.20);
-      display:grid;
-      place-items:center;
-      position:relative;
-    }
-    .starRing::after{
-      content:"";
-      position:absolute; inset:10px;
-      border-radius:999px;
-      border: 1px dashed rgba(255,255,255,.12);
-      opacity:.8;
-    }
-    .starRing .core{
-      width: 32px; height:32px;
-      border-radius: 10px;
-      background: rgba(91,161,212,.18);
-      border: 1px solid rgba(91,161,212,.35);
-      transform: rotate(45deg);
-      position:relative;
-    }
-    .starRing .core::before{
-      content:"";
-      position:absolute; inset:7px;
-      border: 1px solid rgba(255,255,255,.28);
-      border-radius:6px;
-      opacity:.9;
-    }
-
-    .stars{
-      letter-spacing:.22em;
-      color: rgba(255,255,255,.68);
-      font-size: 14px;
-    }
-
-    .charName{
-      margin-top: 10px;
-      display:flex;
-      align-items:baseline;
-      gap: 10px;
-    }
-    .charName h1{
-      margin:0;
-      font-size: 30px;
-      letter-spacing:.08em;
-      font-weight: 800;
-    }
-    .charName .sub{
-      color: rgba(255,255,255,.35);
-      font-size: 12px;
-      letter-spacing:.18em;
-    }
-
-    .roleRow{
-      margin-top: 10px;
-      display:flex;
-      gap: 16px;
-      color: rgba(255,255,255,.55);
-      font-size: 13px;
-      letter-spacing:.10em;
-    }
-    .progress{
-      margin-top: 12px;
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      color: rgba(255,255,255,.50);
-      font-size: 12px;
-    }
-    .bar{
-      height: 6px;
-      flex: 1;
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 99px;
-      overflow:hidden;
-    }
-    .bar > i{
-      display:block;
-      height:100%;
-      width: 51%;
-      background: linear-gradient(90deg, rgba(208,112,78,.95), rgba(208,112,78,.25));
-    }
-
-    .sectionTitle{
-      margin: 18px 0 8px;
-      color: rgba(255,255,255,.56);
-      font-size: 13px;
-      letter-spacing:.18em;
-      display:flex;
-      align-items:center;
-      gap: 10px;
-    }
-    .sectionTitle::after{
-      content:"";
-      height:1px;
-      flex:1;
-      background: rgba(255,255,255,.10);
-    }
-
-    .statsList{
-      display:grid;
-      gap: 8px;
-      padding-right: 6px;
-    }
-    .statLine{
-      display:flex;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-      color: rgba(255,255,255,.62);
-      font-size: 13px;
-      letter-spacing:.06em;
-    }
-    .statLine b{ color: rgba(255,255,255,.85); font-weight:700; }
-
-    /* ─────────── RIGHT UI BOXES ─────────── */
-    .rowBoxes{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .box{
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.04);
-      border-radius: 6px;
-      height: 54px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      overflow:hidden;
-    }
-    .box .label{
-      padding: 0 12px;
-      color: rgba(255,255,255,.68);
-      font-size: 13px;
-      letter-spacing:.10em;
-      white-space:nowrap;
-    }
-    .box .val{
-      padding: 0 12px;
-      color: rgba(255,255,255,.82);
-      font-weight:800;
-      letter-spacing:.06em;
-      white-space:nowrap;
-    }
-    .box .plus{
-      width: 44px; height: 100%;
-      display:grid; place-items:center;
-      background: linear-gradient(180deg, rgba(208,112,78,.92), rgba(165,78,54,.92));
-      color: rgba(0,0,0,.75);
-      font-weight:900;
-      font-size: 24px;
-      border-left: 1px solid rgba(0,0,0,.25);
-    }
-
-    .miniTabs{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      margin-top: 6px;
-      color: rgba(255,255,255,.55);
-      font-size: 12px;
-      letter-spacing:.18em;
-    }
-    .miniTabs .pill{
-      padding: 8px 12px;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 6px;
-      background: rgba(0,0,0,.16);
-      flex:1;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      min-width:0;
-    }
-    .miniTabs .pill b{ color: rgba(255,255,255,.82); }
-    .miniTabs .tri{
-      width: 16px; height: 16px;
-      border: 1px solid rgba(255,255,255,.20);
-      transform: rotate(45deg);
-      opacity:.7;
-    }
-
-    .cards{
-      margin-top: 10px;
-      display:flex;
-      gap: 12px;
-      align-items:flex-end;
-    }
-    .card{
-      width: 92px;
-      height: 118px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,.14);
-      background:
-        radial-gradient(60px 50px at 40% 35%, rgba(208,112,78,.18), transparent 65%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.18));
-      position:relative;
-      overflow:hidden;
-      box-shadow: 0 14px 28px rgba(0,0,0,.35);
-    }
-    .card::after{
-      content:"Attack";
-      position:absolute;
-      left: 8px;
-      bottom: 8px;
-      font-size: 11px;
-      letter-spacing:.12em;
-      color: rgba(255,255,255,.55);
-    }
-    .card .art{
-      position:absolute;
-      inset: 10px 10px 28px 10px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,.10);
-      background:
-        conic-gradient(from 180deg, rgba(208,112,78,.2), rgba(255,255,255,.06), rgba(0,0,0,.2));
-      opacity:.9;
-    }
-
-    .favRow{
-      margin-top: 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      color: rgba(255,255,255,.62);
-      font-size: 13px;
-      letter-spacing:.10em;
-    }
-    .favRow .blob{
-      width: 64px; height: 42px;
-      border-radius: 999px;
-      background: radial-gradient(30px 25px at 40% 40%, rgba(140,255,120,.55), rgba(0,0,0,.0) 70%),
-                  radial-gradient(50px 40px at 60% 60%, rgba(60,190,60,.35), transparent 75%),
-                  rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 10px 20px rgba(0,0,0,.35);
-    }
-
-    .bottomBoxes{
-      margin-top:auto;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .bigBox{
-      height: 74px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.05);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 0 14px;
-      overflow:hidden;
-      position:relative;
-    }
-    .bigBox::before{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        linear-gradient(90deg, transparent, rgba(255,255,255,.06), transparent);
-      opacity:.65;
-      transform: translateX(-35%);
-      pointer-events:none;
-    }
-    .bigBox .t{
-      color: rgba(255,255,255,.72);
-      letter-spacing:.18em;
-      font-weight:700;
-    }
-    .bigBox .lvl{
-      color: rgba(255,255,255,.50);
-      letter-spacing:.14em;
-      font-size: 12px;
-    }
-    .glyph{
-      width: 54px; height: 54px;
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 999px;
-      background: rgba(0,0,0,.18);
-      display:grid;
-      place-items:center;
-      opacity:.85;
-    }
-    .glyph svg{ width: 30px; height: 30px; opacity:.85; }
-
-    /* レスポンシブ：スマホは縦積み */
-    @media (max-width: 1050px){
-      body{ overflow:auto; }
-      .screen{ height:auto; }
-      .main{ grid-template-columns: 1fr; }
-      .left,.right{ padding: 0; }
-      .portraitWrap{ width: min(380px, 86vw); height: min(520px, 70vh); }
-      .sig{ font-size: 40px; }
-      .right{ min-height: 540px; }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reverse:1999 Character UI Mock</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="screen">
+  <!-- 16:9の“画面”を中央に出して、ウィンドウに合わせてスケール -->
+  <main class="viewport">
+    <section class="screen" aria-label="Reverse 1999 style character screen">
+      <!-- 背景（地） -->
+      <img class="bg" src="assets/bg_base.jpg" alt="" />
 
-    <!-- TOP -->
-    <header class="topbar">
-      <div class="icons" aria-label="top icons">
-        <div class="ic" title="triangle">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 4 21 20H3L12 4Z"/>
-          </svg>
-        </div>
-        <div class="ic" title="square">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M6 6h12v12H6z"/>
-          </svg>
-        </div>
-        <div class="ic" title="eye">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/>
-            <path d="M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/>
-          </svg>
-        </div>
-        <div class="ic" title="pin">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 2v7"/>
-            <path d="M8 9h8l-1 6H9L8 9Z"/>
-            <path d="M12 15v7"/>
-          </svg>
-        </div>
-        <div class="ic" title="alert">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 2 22 12 12 22 2 12 12 2Z"/>
-            <path d="M12 7v6"/>
-            <path d="M12 17h.01"/>
-          </svg>
-        </div>
-      </div>
+      <!-- 上のアイコン列（画像アセット） -->
+      <img class="top-icons" src="assets/top_icons.png" alt="top icons" />
 
-      <div class="doc">
-        <span class="dot"></span>
-        <span>DOCUMENT</span>
-        <span class="dot"></span>
-      </div>
-    </header>
+      <!-- 左上：属性（画像アセット） -->
+      <img class="attr" src="assets/icon_mineral.png" alt="mineral attribute" />
 
-    <!-- MAIN -->
-    <main class="main">
+      <!-- 中央：立ち絵（画像アセット） -->
+      <img class="chara" src="assets/char_rubusica.png" alt="character" />
 
-      <!-- LEFT -->
-      <section class="left" aria-label="left info">
-        <div class="badgeStar">
-          <div class="starRing"><div class="core"></div></div>
-          <div class="stars">✦✦✦✦✦✦</div>
+      <!-- 右上：レベル/洞察（画像アセット） -->
+      <img class="right-top-cards" src="assets/card_level_insight.png" alt="level & insight cards" />
+
+      <!-- 右中：スキルカード3枚（画像アセット） -->
+      <img class="skill-cards" src="assets/skill_cards.png" alt="skill cards" />
+
+      <!-- 右中下：お気に入りの心相（画像アセット） -->
+      <img class="heart" src="assets/favorite_heart.png" alt="favorite psychube" />
+
+      <!-- 右下：塑造/共鳴（画像アセット） -->
+      <img class="bottom-buttons" src="assets/bottom_buttons.png" alt="bottom buttons" />
+
+      <!-- ====== ここからHTML/CSSで再現するUI（文字/線/ゲージ） ====== -->
+
+      <!-- 左：星/名前/ロール -->
+      <div class="left-info">
+        <div class="stars" aria-label="rarity stars">
+          <span>★★★★★</span><span class="dim">★★★★</span>
+        </div>
+        <div class="name">ルブシカ</div>
+        <div class="roman">RUBUSICA</div>
+
+        <div class="bond">
+          <div class="bond-label">絆</div>
+          <div class="bond-bar">
+            <div class="bond-fill" style="width:88%"></div>
+          </div>
+          <div class="bond-val">88%</div>
         </div>
 
-        <div class="charName">
-          <h1>レグルス</h1>
-          <div class="sub">Regulus</div>
-        </div>
-
-        <div class="progress">
-          <span style="letter-spacing:.14em;">絆</span>
-          <div class="bar" aria-label="bond bar"><i></i></div>
-          <span style="min-width:44px; text-align:right;">51%</span>
-        </div>
-
-        <div class="roleRow">
-          <span>アタッカー</span>
+        <div class="tags">
+          <span>回復</span>
           <span>サポート</span>
+          <span>血の絆</span>
         </div>
+      </div>
 
-        <div class="sectionTitle">個人ステータス ▶</div>
-        <div class="statsList">
-          <div class="statLine"><span>攻撃力</span><b>1065</b></div>
-          <div class="statLine"><span>HP</span><b>5181</b></div>
-          <div class="statLine"><span>リアル防御</span><b>420</b></div>
-          <div class="statLine"><span>メンタル防御</span><b>536</b></div>
-          <div class="statLine"><span>クリティカルテクニック</span><b>466</b></div>
-        </div>
-      </section>
+      <!-- 左下：個人ステータス -->
+      <div class="stats">
+        <div class="stats-title">個人ステータス<span class="arrow">▶</span></div>
 
-      <!-- CENTER -->
-      <section class="center" aria-label="portrait area">
-        <div class="portraitWrap">
-          <div class="portrait">
-            <div class="portraitHint">
-              立ち絵を入れるならCSSの <b>--portrait-url</b> を変更！<br/>
-              例： <code>--portrait-url: url("./regulus.png")</code>
-            </div>
+        <div class="stat-grid">
+          <div class="row">
+            <div class="k">攻撃力</div><div class="v">1705</div>
+            <div class="k">HP</div><div class="v">15675</div>
           </div>
-          <div class="sig">Regulus</div>
-        </div>
-      </section>
-
-      <!-- RIGHT -->
-      <section class="right" aria-label="right ui">
-        <div class="rowBoxes">
-          <div class="box">
-            <div class="label">レベル</div>
-            <div class="val">27/50</div>
-            <div class="plus">＋</div>
+          <div class="row">
+            <div class="k">リアル防御力</div><div class="v">627</div>
+            <div class="k">メンタル防御</div><div class="v">627</div>
           </div>
-          <div class="box">
-            <div class="label">洞察</div>
-            <div class="val">Ⅱ</div>
-            <div class="plus">＋</div>
+          <div class="row single">
+            <div class="k">クリティカルテクニック</div><div class="v">381</div>
           </div>
         </div>
+      </div>
 
-        <div class="miniTabs">
-          <div class="pill"><b>プランニュー…</b><span class="tri" aria-hidden="true"></span></div>
-          <div class="pill"><b>△</b><span class="tri" aria-hidden="true"></span></div>
-          <div class="pill"><b>△△</b><span class="tri" aria-hidden="true"></span></div>
-        </div>
+      <!-- 右中下：お気に入りテキスト（画像ではなく文字だけで） -->
+      <div class="fav-text">
+        <div class="t">お気に入りの心相 ▶</div>
+        <div class="lv">Lv.60</div>
+      </div>
 
-        <div class="cards" aria-label="skill cards">
-          <div class="card"><div class="art"></div></div>
-          <div class="card"><div class="art"></div></div>
-          <div class="card"><div class="art"></div></div>
-        </div>
+      <!-- 右下：共鳴Lv（文字だけ） -->
+      <div class="resonance-lv">Lv.12</div>
 
-        <div class="favRow">
-          <span>お気に入りの心相 ▶　<b style="color:rgba(255,255,255,.85)">Lv.40</b></span>
-          <span class="blob" aria-hidden="true"></span>
-        </div>
-
-        <div class="bottomBoxes">
-          <div class="bigBox">
-            <div>
-              <div class="t">塑造</div>
-              <div class="lvl">—</div>
-            </div>
-            <div class="glyph" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M4 18 12 6l8 12"/>
-                <path d="M8 18h8"/>
-              </svg>
-            </div>
-          </div>
-
-          <div class="bigBox">
-            <div>
-              <div class="t">共鳴</div>
-              <div class="lvl">Lv.3</div>
-            </div>
-            <div class="glyph" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M12 3 3 9l9 12 9-12-9-6Z"/>
-                <path d="M12 3v18"/>
-              </svg>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-  </div>
+      <!-- うっすい装飾線（CSSで） -->
+      <div class="decor-lines" aria-hidden="true"></div>
+    </section>
+  </main>
 </body>
 </html>
