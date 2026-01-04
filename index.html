@@ -2,94 +2,137 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Reverse:1999 Character UI Mock</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reverse:1999 風 キャラ画面（再現テンプレ）</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <!-- 16:9の“画面”を中央に出して、ウィンドウに合わせてスケール -->
-  <main class="viewport">
-    <section class="screen" aria-label="Reverse 1999 style character screen">
-      <!-- 背景（地） -->
-      <img class="bg" src="assets/bg_base.jpg" alt="" />
+  <div class="viewport">
+    <main class="stage" role="img" aria-label="Reverse:1999 style character screen mock">
+      <!-- 上部アイコン列（簡易再現：CSSとSVGで描く） -->
+      <div class="top-icons">
+        <button class="icon" aria-label="menu 1">
+          <svg viewBox="0 0 24 24"><path d="M4 18 L12 6 L20 18 Z"/></svg>
+        </button>
+        <button class="icon" aria-label="menu 2">
+          <svg viewBox="0 0 24 24"><path d="M6 6 H18 V18 H6 Z"/></svg>
+        </button>
+        <button class="icon" aria-label="menu 3">
+          <svg viewBox="0 0 24 24"><path d="M12 4 L20 12 L12 20 L4 12 Z"/></svg>
+        </button>
+        <button class="icon" aria-label="menu 4">
+          <svg viewBox="0 0 24 24"><path d="M6 18 L18 18 L12 6 Z"/><path d="M12 10 V18"/></svg>
+        </button>
+        <button class="icon" aria-label="menu 5">
+          <svg viewBox="0 0 24 24"><path d="M4 12 H20"/><path d="M8 6 L16 18"/></svg>
+        </button>
+        <button class="icon" aria-label="menu 6">
+          <svg viewBox="0 0 24 24"><path d="M12 4 L20 12 L12 20 L4 12 Z"/><path d="M12 8 V13"/></svg>
+        </button>
+      </div>
 
-      <!-- 上のアイコン列（画像アセット） -->
-      <img class="top-icons" src="assets/top_icons.png" alt="top icons" />
+      <!-- 背景のうっすい DOCUMENT 文字（CSSでそれっぽく） -->
+      <div class="watermark">DOCUMENT</div>
 
-      <!-- 左上：属性（画像アセット） -->
-      <img class="attr" src="assets/icon_mineral.png" alt="mineral attribute" />
+      <!-- 中央：立ち絵（素材） -->
+      <div class="portrait">
+        <img src="./assets/portrait.png" alt="character portrait" />
+      </div>
 
-      <!-- 中央：立ち絵（画像アセット） -->
-      <img class="chara" src="assets/char_rubusica.png" alt="character" />
-
-      <!-- 右上：レベル/洞察（画像アセット） -->
-      <img class="right-top-cards" src="assets/card_level_insight.png" alt="level & insight cards" />
-
-      <!-- 右中：スキルカード3枚（画像アセット） -->
-      <img class="skill-cards" src="assets/skill_cards.png" alt="skill cards" />
-
-      <!-- 右中下：お気に入りの心相（画像アセット） -->
-      <img class="heart" src="assets/favorite_heart.png" alt="favorite psychube" />
-
-      <!-- 右下：塑造/共鳴（画像アセット） -->
-      <img class="bottom-buttons" src="assets/bottom_buttons.png" alt="bottom buttons" />
-
-      <!-- ====== ここからHTML/CSSで再現するUI（文字/線/ゲージ） ====== -->
-
-      <!-- 左：星/名前/ロール -->
-      <div class="left-info">
-        <div class="stars" aria-label="rarity stars">
-          <span>★★★★★</span><span class="dim">★★★★</span>
+      <!-- 左情報（HTML/CSS再現） -->
+      <section class="left">
+        <div class="attr">
+          <img src="./assets/attr_badge.png" alt="attribute badge" />
         </div>
-        <div class="name">ルブシカ</div>
-        <div class="roman">RUBUSICA</div>
+
+        <div class="stars" aria-label="rarity">
+          <span class="star on"></span><span class="star on"></span><span class="star on"></span>
+          <span class="star on"></span><span class="star on"></span><span class="star on"></span>
+        </div>
+
+        <div class="name">
+          <div class="jp">ルブシカ</div>
+          <div class="en">Ribunsika</div>
+        </div>
 
         <div class="bond">
-          <div class="bond-label">絆</div>
-          <div class="bond-bar">
-            <div class="bond-fill" style="width:88%"></div>
+          <div class="label">絆</div>
+          <div class="bar">
+            <div class="fill" style="width: 88%;"></div>
           </div>
-          <div class="bond-val">88%</div>
+          <div class="pct">88%</div>
         </div>
 
-        <div class="tags">
+        <div class="roles">
           <span>回復</span>
           <span>サポート</span>
-          <span>血の絆</span>
+          <span>血の蔓</span>
         </div>
-      </div>
 
-      <!-- 左下：個人ステータス -->
-      <div class="stats">
-        <div class="stats-title">個人ステータス<span class="arrow">▶</span></div>
+        <div class="divider"></div>
 
-        <div class="stat-grid">
+        <div class="subtitle">個人ステータス <span class="arrow">▶</span></div>
+
+        <dl class="stats">
           <div class="row">
-            <div class="k">攻撃力</div><div class="v">1705</div>
-            <div class="k">HP</div><div class="v">15675</div>
+            <dt>攻撃力</dt><dd>1705</dd>
+            <dt class="hp">HP</dt><dd>15675</dd>
           </div>
           <div class="row">
-            <div class="k">リアル防御力</div><div class="v">627</div>
-            <div class="k">メンタル防御</div><div class="v">627</div>
+            <dt>リアル防御力</dt><dd>627</dd>
+            <dt>メンタル防御</dt><dd>627</dd>
           </div>
-          <div class="row single">
-            <div class="k">クリティカルテクニック</div><div class="v">381</div>
+          <div class="row">
+            <dt>クリティカルテクニック</dt><dd>381</dd>
+            <dt class="ghost"></dt><dd class="ghost"></dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- 右情報：カード画像＋周辺はCSS再現 -->
+      <section class="right">
+        <div class="upgrade">
+          <img class="card" src="./assets/right_level.png" alt="level card" />
+          <img class="card" src="./assets/right_insight.png" alt="insight card" />
+        </div>
+
+        <div class="skillbar">
+          <div class="skillname">愉快な笛吹き</div>
+          <div class="tri">
+            <span></span><span></span><span></span><span></span>
           </div>
         </div>
-      </div>
 
-      <!-- 右中下：お気に入りテキスト（画像ではなく文字だけで） -->
-      <div class="fav-text">
-        <div class="t">お気に入りの心相 ▶</div>
-        <div class="lv">Lv.60</div>
-      </div>
+        <div class="skills">
+          <img src="./assets/skill_1.png" alt="skill card 1" />
+          <img src="./assets/skill_2.png" alt="skill card 2" />
+          <img src="./assets/skill_3.png" alt="skill card 3" />
+        </div>
 
-      <!-- 右下：共鳴Lv（文字だけ） -->
-      <div class="resonance-lv">Lv.12</div>
+        <div class="favorite">
+          <div class="favlabel">
+            お気に入りの心相 <span class="arrow">▶</span>
+            <span class="lv">Lv.60</span>
+          </div>
+          <img class="psy" src="./assets/psychube.png" alt="psychube" />
+        </div>
 
-      <!-- うっすい装飾線（CSSで） -->
-      <div class="decor-lines" aria-hidden="true"></div>
-    </section>
-  </main>
+        <div class="bottom-buttons">
+          <button class="big leftbtn">
+            <span class="cap">塑造</span>
+            <span class="chev"></span>
+          </button>
+          <button class="big rightbtn">
+            <span class="cap">共鳴</span>
+            <span class="small">Lv.12</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- うっすい斜線＆点々装飾（CSS） -->
+      <div class="decor-lines"></div>
+      <div class="decor-dots"></div>
+    </main>
+  </div>
 </body>
 </html>
