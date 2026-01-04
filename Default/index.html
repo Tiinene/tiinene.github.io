@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Reverse:1999風 キャラ画面（再現・比率修正版）</title>
+  <title>Reverse:1999風 キャラ画面（再現・左下修正＋✦）</title>
   <style>
     :root{
       --bg0:#0b0e12;
@@ -13,7 +13,6 @@
       --inkSoft:rgba(232,237,245,.72);
       --muted:rgba(232,237,245,.45);
       --line:rgba(232,237,245,.14);
-      --line2:rgba(232,237,245,.10);
 
       --accent:#d7b46a;
       --accent2:#c86d4a;
@@ -42,7 +41,6 @@
         linear-gradient(160deg, var(--bg0), var(--bg1));
     }
 
-    /* 16:9固定 */
     .screen{
       width:min(100vw, calc(100vh * (16/9)));
       height:min(100vh, calc(100vw * (9/16)));
@@ -55,8 +53,6 @@
         radial-gradient(1200px 700px at 46% 45%, rgba(200,90,60,.22), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.25)),
         linear-gradient(140deg, rgba(18,22,30,.92), rgba(10,12,16,.92));
-
-      /* ★これが今回の肝：中の単位を screen 基準に揃える */
       container-type: size;
     }
 
@@ -70,7 +66,6 @@
       mix-blend-mode: overlay;
       pointer-events:none;
     }
-
     .screen::after{
       content:"";
       position:absolute; inset:0;
@@ -82,11 +77,10 @@
       pointer-events:none;
     }
 
-    /* ===== レイアウト（割合固定） ===== */
     .left, .center, .right{
       position:absolute;
       top:0; bottom:0;
-      padding: 4cqh 3cqw; /* ←vwじゃなくcqw/cqhに統一 */
+      padding: 4cqh 3cqw;
       z-index:2;
       overflow:hidden;
     }
@@ -94,7 +88,7 @@
     .center{ left:35%; width:34%; display:grid; place-items:center; }
     .right{ right:0; width:34%; padding-left:2cqw; padding-right:3cqw; }
 
-    /* ===== 上部アイコン（cqwに統一） ===== */
+    /* ===== 上部アイコン ===== */
     .top-icons{
       position:absolute;
       top:2.6cqh;
@@ -115,7 +109,6 @@
     }
     .iconBtn:hover{ opacity:1; border-color: rgba(215,180,106,.8); }
     .iconBtn::before, .iconBtn::after{ content:""; position:absolute; inset:0; margin:auto; }
-
     .iconBtn.tri{ border:none; }
     .iconBtn.tri::before{
       width:0; height:0;
@@ -183,7 +176,6 @@
       transform: translateY(-10%);
     }
 
-    /* ===== 背景文字 ===== */
     .bgWord{
       position:absolute;
       top:4.5cqh;
@@ -199,13 +191,13 @@
       white-space:nowrap;
     }
 
-    /* ===== 左カラム：はみ出し対策で “縦フロー” ===== */
+    /* ===== 左：縦フロー（ここを詰めて“左下沈み”解消） ===== */
     .leftFlow{
       height:100%;
       display:flex;
       flex-direction:column;
-      gap: 1.3cqh;
-      padding-top: 7cqh; /* 上アイコンと被らない */
+      gap: 1.05cqh;     /* ←少し詰めた */
+      padding-top: 6.2cqh; /* ←7→6.2（全体を上に） */
       padding-left: 2cqw;
       padding-right: 1cqw;
       min-height:0;
@@ -256,9 +248,10 @@
       white-space:nowrap;
     }
 
+    /* ✦に変更 */
     .rarity{
       color: rgba(232,237,245,.75);
-      letter-spacing:.25em;
+      letter-spacing:.22em;
       font-size: 1.6cqw;
       text-shadow: 0 6px 18px rgba(0,0,0,.55);
       flex:0 0 auto;
@@ -274,7 +267,7 @@
     }
     .charNameSub{
       display:block;
-      margin-top: .6cqh;
+      margin-top: .55cqh;  /* ちょい詰め */
       font-family: var(--mono);
       font-size: 1.15cqw;
       letter-spacing:.28em;
@@ -296,7 +289,7 @@
       font-size: 1.1cqw;
     }
     .bondBar{
-      height: 1.0cqh;
+      height: 0.95cqh;
       min-height: 8px;
       border-radius:999px;
       background: rgba(232,237,245,.12);
@@ -325,28 +318,27 @@
       color: rgba(232,237,245,.65);
       letter-spacing:.08em;
       font-size: 1.35cqw;
-      padding: .9cqh 0;
+      padding: .8cqh 0;            /* 少し詰め */
       border-bottom: 1px solid rgba(232,237,245,.10);
       cursor:pointer;
       flex:0 0 auto;
     }
     .sectionTitle .chev{ float:right; opacity:.6; }
 
-    /* ステータス：ここがはみ出しやすいので“確実に収まる設計”に */
+    /* ★ 左下沈みの主犯：ここを圧縮して上に持ち上げる */
     .stats{
       width: 86%;
       display:grid;
-      gap: 1.0cqh;
+      gap: 0.75cqh;     /* ←1.0→0.75 で詰める */
       min-height:0;
-      flex: 1 1 auto;    /* 余った高さに収まる */
-      overflow:hidden;   /* はみ出し防止 */
-      padding-top: .4cqh;
+      flex: 1 1 auto;
+      overflow:hidden;
+      padding-top: .2cqh;
     }
 
-    /* グレー四角（プレート） */
     .statPlate{
       position:relative;
-      padding: .9cqh 1.0cqw;
+      padding: .6cqh 1.0cqw;  /* ←上下を少し薄く */
       border-left: 1px solid rgba(232,237,245,.10);
     }
     .statPlate::before{
@@ -354,7 +346,7 @@
       position:absolute;
       left:0; right:0;
       top:50%;
-      height: 3.2cqh;      /* 固定っぽく見える高さ */
+      height: 2.7cqh;          /* ←3.2→2.7 プレートも薄く */
       transform: translateY(-50%);
       background: rgba(232,237,245,.06);
       border: 1px solid rgba(232,237,245,.07);
@@ -376,7 +368,7 @@
       gap: .8cqw;
       color: var(--inkSoft);
       letter-spacing:.06em;
-      font-size: 1.25cqw;
+      font-size: 1.18cqw; /* 少し小さめで安定 */
       min-width:0;
       white-space:nowrap;
       overflow:hidden;
@@ -385,7 +377,7 @@
     .statVal{
       font-family: var(--mono);
       letter-spacing:.12em;
-      font-size: 1.25cqw;
+      font-size: 1.18cqw;
       color: rgba(232,237,245,.86);
       white-space:nowrap;
     }
@@ -406,10 +398,11 @@
     .bullet.mdef{ background: rgba(160,120,210,.10); }
     .bullet.crit{ background: rgba(232,237,245,.08); }
 
+    /* 左下ドット：固定でちょい上に上げる */
     .leftDots{
       position:absolute;
       left: 6cqw;
-      bottom: 6cqh;
+      bottom: 8.5cqh;  /* ←6→8.5（沈み回避） */
       width: 10cqw; height: 3cqh;
       opacity:.35;
       background:
@@ -473,7 +466,7 @@
     .spark.s1{ left: 56%; top: 33%; }
     .spark.s2{ left: 62%; top: 38%; width: 1.4cqw; height:1.4cqw; opacity:.45; }
 
-    /* ===== 右：上の2ボックス（サイズ統一） ===== */
+    /* ===== 右：ボタン比率など（そのまま） ===== */
     .rightFlow{
       height:100%;
       display:flex;
@@ -496,7 +489,7 @@
       background: linear-gradient(180deg, rgba(245,240,230,.88), rgba(245,240,230,.78));
       color: #2b2b2b;
       padding: 1.3cqh 3.6cqw 1.2cqh 1.4cqw;
-      height: 8.8cqh;              /* ←高さをcqhで固定、比率が揃う */
+      height: 8.8cqh;
       box-shadow: 0 10px 18px rgba(0,0,0,.22);
       overflow:hidden;
     }
@@ -542,6 +535,7 @@
       cursor:pointer;
       opacity:.85;
     }
+
     .insight .boxValue{
       display:flex;
       align-items:center;
@@ -557,7 +551,6 @@
       box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
     }
 
-    /* スキルバー */
     .skillBar{
       border: 1px solid rgba(232,237,245,.14);
       background: rgba(10,12,16,.28);
@@ -585,7 +578,6 @@
       clip-path: polygon(50% 0, 0 100%, 100% 100%);
     }
 
-    /* カード */
     .cards{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -603,7 +595,6 @@
       -webkit-user-drag:none;
     }
 
-    /* お気に入りの心相 */
     .favorite{
       display:flex;
       align-items:center;
@@ -635,9 +626,8 @@
       box-shadow: 0 10px 20px rgba(0,0,0,.35);
     }
 
-    /* 右下ボタン：比率を揃えて固定配置 */
     .bottomButtons{
-      margin-top:auto;               /* 下に寄せる */
+      margin-top:auto;
       width: 100%;
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -704,7 +694,8 @@
             <div class="affinityLabel">MINERAL</div>
           </div>
 
-          <div class="rarity" aria-label="rarity">★★★★★★</div>
+          <!-- ★→✦ -->
+          <div class="rarity" aria-label="rarity">✦✦✦✦✦✦</div>
 
           <h1 class="charName">
             ルブシカ
