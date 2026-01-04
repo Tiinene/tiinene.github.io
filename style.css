@@ -1,0 +1,277 @@
+:root{
+  --ink: rgba(230, 235, 245, .92);
+  --muted: rgba(180, 190, 210, .75);
+  --line: rgba(255, 255, 255, .12);
+  --shadow: 0 18px 40px rgba(0,0,0,.45);
+  --gold: rgba(215, 180, 106, .95);
+  --ui-font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+body{
+  margin:0;
+  background:#090b10;
+  color:var(--ink);
+  font-family:var(--ui-font);
+  overflow:hidden;
+}
+
+/* ウィンドウに合わせて 16:9 の画面を最大表示 */
+.viewport{
+  height:100%;
+  display:grid;
+  place-items:center;
+  padding:18px;
+}
+
+.screen{
+  position:relative;
+  width:min(96vw, calc(96vh * (16/9)));
+  aspect-ratio:16/9;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow: var(--shadow);
+  background:#0b0e12;
+}
+
+/* 背景（地） */
+.bg{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  filter:saturate(.95) contrast(1.02);
+}
+
+/* 画像アセット類：全部 absolute で貼る */
+.top-icons,
+.attr,
+.chara,
+.right-top-cards,
+.skill-cards,
+.bottom-buttons,
+.heart{
+  position:absolute;
+  user-select:none;
+  -webkit-user-drag:none;
+  pointer-events:none;
+}
+
+/* 上のアイコン列 */
+.top-icons{
+  left: 3.6%;
+  top: 4.2%;
+  width: 42%;
+  opacity: .95;
+}
+
+/* 左上：属性 */
+.attr{
+  left: 6.2%;
+  top: 16.2%;
+  width: 10.8%;
+  opacity: .95;
+}
+
+/* 立ち絵（中心寄せ） */
+.chara{
+  left: 38%;
+  top: 9%;
+  width: 28%;
+  height:auto;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.45));
+}
+
+/* 右上：レベル/洞察カード */
+.right-top-cards{
+  right: 3.7%;
+  top: 14%;
+  width: 42.5%;
+  opacity: .98;
+}
+
+/* 右中：スキルカード3枚 */
+.skill-cards{
+  right: 8.2%;
+  top: 34.3%;
+  width: 26%;
+  opacity: .98;
+}
+
+/* 右中下：お気に入りの心相画像 */
+.heart{
+  right: 10.2%;
+  top: 56.5%;
+  width: 16%;
+  opacity: .98;
+}
+
+/* 右下：塑造/共鳴の白いボタン */
+.bottom-buttons{
+  right: 4.4%;
+  bottom: 8.4%;
+  width: 44%;
+  opacity: .98;
+}
+
+/* ===== 左側UI（HTML/CSS） ===== */
+
+.left-info{
+  position:absolute;
+  left: 12.2%;
+  top: 34.5%;
+  width: 28%;
+}
+
+.stars{
+  font-family: var(--mono);
+  letter-spacing:.12em;
+  font-size: 12px;
+  opacity:.9;
+}
+.stars .dim{ opacity:.25; margin-left: 4px; }
+
+.name{
+  margin-top: 10px;
+  font-size: 26px;
+  letter-spacing:.12em;
+  font-weight: 700;
+  text-shadow: 0 2px 12px rgba(0,0,0,.35);
+}
+.roman{
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing:.25em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.bond{
+  margin-top: 16px;
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  align-items:center;
+  gap:10px;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing:.12em;
+}
+.bond-label{ opacity:.85; }
+.bond-bar{
+  height: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(0,0,0,.25);
+  overflow:hidden;
+}
+.bond-fill{
+  height:100%;
+  background: linear-gradient(90deg, rgba(220,90,90,.95), rgba(220,120,90,.95));
+  box-shadow: 0 0 0 1px rgba(255,255,255,.12) inset;
+}
+.bond-val{ font-family:var(--mono); opacity:.9; }
+
+.tags{
+  margin-top: 14px;
+  display:flex;
+  gap: 16px;
+  color: rgba(210, 215, 230, .75);
+  font-size: 13px;
+  letter-spacing:.08em;
+}
+.tags span{
+  position:relative;
+  padding: 6px 0;
+}
+.tags span::after{
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:-6px;
+  height:1px;
+  background: linear-gradient(90deg, transparent, var(--line), transparent);
+  opacity:.55;
+}
+
+/* 左下ステータス */
+.stats{
+  position:absolute;
+  left: 10.5%;
+  bottom: 12.2%;
+  width: 34%;
+}
+.stats-title{
+  color: rgba(220, 225, 240, .85);
+  letter-spacing:.12em;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 12px rgba(0,0,0,.35);
+}
+.stats-title .arrow{ opacity:.7; margin-left:6px; }
+
+.stat-grid{
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 10px;
+}
+.row{
+  display:grid;
+  grid-template-columns: 1.4fr .8fr 1.2fr .8fr;
+  gap: 10px 14px;
+  align-items:baseline;
+  padding: 6px 0;
+}
+.row.single{
+  grid-template-columns: 1.4fr .8fr;
+}
+.k{
+  color: rgba(190, 198, 215, .75);
+  letter-spacing:.10em;
+  font-size: 13px;
+}
+.v{
+  font-family: var(--mono);
+  font-size: 16px;
+  letter-spacing:.08em;
+  color: rgba(235, 240, 250, .92);
+}
+
+/* 右中下：お気に入りテキスト */
+.fav-text{
+  position:absolute;
+  right: 18.5%;
+  top: 60.3%;
+  display:flex;
+  align-items:baseline;
+  gap: 14px;
+  color: rgba(210, 216, 230, .78);
+  letter-spacing:.10em;
+  font-size: 13px;
+}
+.fav-text .lv{
+  font-family: var(--mono);
+  color: rgba(235, 240, 250, .9);
+}
+
+/* 共鳴Lv（右下の白いボタン上に重ねる） */
+.resonance-lv{
+  position:absolute;
+  right: 8.7%;
+  bottom: 11.3%;
+  font-family: var(--mono);
+  font-size: 14px;
+  letter-spacing:.08em;
+  color: rgba(0,0,0,.55);
+  opacity: .85;
+}
+
+/* うっすい装飾線 */
+.decor-lines{
+  position:absolute; inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 55% 46%, rgba(210, 90, 70, .18), transparent 60%),
+    linear-gradient(120deg, transparent 0 30%, rgba(255,255,255,.06) 30% 30.2%, transparent 30.2% 100%);
+  mix-blend-mode: screen;
+  opacity: .35;
+}
